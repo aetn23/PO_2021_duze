@@ -1,11 +1,12 @@
 package pl.edu.mimuw.matrix;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 
 public class DiagonalMatrix extends GeneralMatrix {
-	private ArrayList<Double> diagonal;
+	private final ArrayList<Double> diagonal;
 
 	public DiagonalMatrix(double... diagonal_values) {
 		assert diagonal_values.length != 0;
@@ -17,6 +18,10 @@ public class DiagonalMatrix extends GeneralMatrix {
 		for (double diagonal_value : diagonal_values) {
 			diagonal.add(diagonal_value);
 		}
+	}
+
+	public DiagonalMatrix(ArrayList<Double> diagonal) {
+		this.diagonal = diagonal;
 	}
 
 	@Override
@@ -34,7 +39,15 @@ public class DiagonalMatrix extends GeneralMatrix {
 		return diagonal.stream().reduce(0., (acc, b) -> acc + b*b);
 	}
 
+	@Override
+	public IDoubleMatrix times(double scalar) {
+		return new DiagonalMatrix(diagonal.stream().map(value -> value*scalar).collect(Collectors.toCollection(ArrayList::new)));
+	}
 
+	@Override
+	public IDoubleMatrix plus(double scalar) {
+		return new DiagonalMatrix(diagonal.stream().map(value -> value+scalar).collect(Collectors.toCollection(ArrayList::new)));
+	}
 
 	@Override
 	public double get(int row, int column) {
