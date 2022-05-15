@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
+
 public class FullMatrix extends GeneralMatrix {
 	private Shape shape;
 	private ArrayList<ArrayList<Double>> values = new ArrayList<>();
@@ -91,20 +94,26 @@ public class FullMatrix extends GeneralMatrix {
 	}
 
 	@Override
-	// todo this sums rows, not columns.
 	public double normOne() {
-		return values.stream().map(column -> column.stream().reduce(0., Double::sum))
-						.collect(Collectors.toCollection(ArrayList::new)).stream().reduce(0., (a, b) -> a > b ? a : b);
+		var result = new ArrayList<Double>();
+		for (int i = 0; i < shape.columns; i++) {
+			double sum_column = 0.;
+			for (int j = 0; j < shape.rows; j++) {
+				sum_column += abs(values.get(j).get(i));
+			}
+			result.add(sum_column);
+		}
+		return result.stream().reduce(0., (a, b) -> a > b ? a : b);
 	}
 
 	@Override
 	public double normInfinity() {
-		return 0;
+		return values.stream().map(row -> row.stream().reduce(0., (a, b) -> abs(a) + abs(b))).reduce(0., (a, b) -> a > b ? a : b);
 	}
 
 	@Override
 	public double frobeniusNorm() {
-		return 0;
+		return sqrt(values.stream().map(row -> row.stream().reduce(0., (a,b) -> a + b*b)).reduce(0., Double::sum));
 	}
 
 	@Override
