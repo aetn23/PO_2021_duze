@@ -38,12 +38,30 @@ public class FullMatrix extends GeneralMatrix {
 
 	@Override
 	public IDoubleMatrix times(IDoubleMatrix other) {
-		return null;
+		assert shape.columns == other.shape().rows;
+
+		var result_as_array = new ArrayList<ArrayList<Double>>();
+		for (int i = 0; i < shape.rows; i++) {
+			result_as_array.add(new ArrayList<Double>());
+			for (int j = 0; j < other.shape().columns; j++) {
+				double sum = 0.;
+				for (int k = 0; k < shape.columns; k++)
+					sum += get(i, k) * other.get(k, j);
+
+				result_as_array.get(i).add(sum);
+			}
+		}
+
+		return new FullMatrix(result_as_array);
 	}
 
 	@Override
 	public IDoubleMatrix times(double scalar) {
-		var multiplication_result = this.values.stream().map(row -> (row.stream().map(value -> value * scalar)).collect(Collectors.toCollection(ArrayList::new))).collect(Collectors.toCollection(ArrayList::new));
+		var multiplication_result =
+						this.values.stream().map(row -> (row.stream()
+														.map(value -> value * scalar)).collect(
+														Collectors.toCollection(ArrayList::new)))
+										.collect(Collectors.toCollection(ArrayList::new));
 		return new FullMatrix(multiplication_result);
 	}
 
@@ -64,7 +82,11 @@ public class FullMatrix extends GeneralMatrix {
 
 	@Override
 	public IDoubleMatrix plus(double scalar) {
-		var sum_result = this.values.stream().map(row -> (row.stream().map(value -> value + scalar)).collect(Collectors.toCollection(ArrayList::new))).collect(Collectors.toCollection(ArrayList::new));
+		var sum_result =
+						this.values.stream().map(row -> (row.stream()
+														.map(value -> value + scalar)).collect(
+														Collectors.toCollection(ArrayList::new)))
+										.collect(Collectors.toCollection(ArrayList::new));
 		return new FullMatrix(sum_result);
 	}
 
@@ -108,12 +130,14 @@ public class FullMatrix extends GeneralMatrix {
 
 	@Override
 	public double normInfinity() {
-		return values.stream().map(row -> row.stream().reduce(0., (a, b) -> abs(a) + abs(b))).reduce(0., (a, b) -> a > b ? a : b);
+		return values.stream().map(row -> row.stream().reduce(0.,
+						(a, b) -> abs(a) + abs(b))).reduce(0., (a, b) -> a > b ? a : b);
 	}
 
 	@Override
 	public double frobeniusNorm() {
-		return sqrt(values.stream().map(row -> row.stream().reduce(0., (a,b) -> a + b*b)).reduce(0., Double::sum));
+		return sqrt(values.stream().map(row -> row.stream().reduce(0.,
+						(a, b) -> a + b * b)).reduce(0., Double::sum));
 	}
 
 	@Override
