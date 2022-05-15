@@ -24,9 +24,17 @@ public class DiagonalMatrix extends GeneralMatrix {
 		return diagonal.stream().reduce(0., (acc, b) -> acc > abs(b) ? acc : abs(b));
 	}
 
-	double normInfinity();
+	@Override
+	public double normInfinity() {
+		return normOne();
+	}
 
-	double frobeniusNorm();
+	@Override
+	public double frobeniusNorm() {
+		return diagonal.stream().reduce(0., (acc, b) -> acc + b*b);
+	}
+
+
 
 	@Override
 	public double get(int row, int column) {
