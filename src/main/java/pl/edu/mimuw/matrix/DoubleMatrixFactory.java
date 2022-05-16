@@ -10,26 +10,26 @@ public class DoubleMatrixFactory {
   }
 
   public static IDoubleMatrix full(double[][] values) {
-    return null; // Tu trzeba wpisać właściwą instrukcję
+    return new FullMatrix(values); // Tu trzeba wpisać właściwą instrukcję
   }
 
   public static IDoubleMatrix identity(int size) {
-    return null; // Tu trzeba wpisać właściwą instrukcję
+    return new IdentityMatrix(size); // Tu trzeba wpisać właściwą instrukcję
   }
 
   public static IDoubleMatrix diagonal(double... diagonalValues) {
-    return null; // Tu trzeba wpisać właściwą instrukcję
+    return new DiagonalMatrix(diagonalValues); // Tu trzeba wpisać właściwą instrukcję
   }
 
   public static IDoubleMatrix antiDiagonal(double... antiDiagonalValues) {
-    return null; // Tu trzeba wpisać właściwą instrukcję
+    return new AntiDiagonalMatrix(antiDiagonalValues); // Tu trzeba wpisać właściwą instrukcję
   }
 
   public static IDoubleMatrix vector(double... values){
-    return null; // Tu trzeba wpisać właściwą instrukcję
+    return new RowMatrix(values, Shape.vector(values.length));
   }
 
   public static IDoubleMatrix zero(Shape shape) {
-    return null; // Tu trzeba wpisać właściwą instrukcję
+    return new ZeroMatrix(shape); // Tu trzeba wpisać właściwą instrukcję
   }
 }

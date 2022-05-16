@@ -17,12 +17,14 @@ public class DiagonalMatrix extends MatrixWithDiagonal {
 
 	@Override
 	public IDoubleMatrix times(double scalar) {
-		return new DiagonalMatrix(diagonal.stream().map(value -> value*scalar).collect(Collectors.toCollection(ArrayList::new)));
+		return new DiagonalMatrix(diagonal.stream().map(value -> value * scalar)
+						.collect(Collectors.toCollection(ArrayList::new)));
 	}
 
 	@Override
 	public IDoubleMatrix plus(double scalar) {
-		return new DiagonalMatrix(diagonal.stream().map(value -> value+scalar).collect(Collectors.toCollection(ArrayList::new)));
+		return new DiagonalMatrix(diagonal.stream().map(value -> value + scalar)
+						.collect(Collectors.toCollection(ArrayList::new)));
 	}
 
 	@Override

@@ -11,6 +11,9 @@ public abstract class GeneralMatrix implements IDoubleMatrix {
 
 	protected Shape shape;
 
+	public GeneralMatrix(Shape shape) {
+		this.shape = shape;
+	}
 	public IDoubleMatrix times(IDoubleMatrix other) {
 		assert this.shape().columns == other.shape().rows;
 

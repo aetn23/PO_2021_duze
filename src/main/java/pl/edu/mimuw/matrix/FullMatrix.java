@@ -7,12 +7,12 @@ public class FullMatrix extends GeneralMatrix {
 
 
 	public FullMatrix(double[][] values) {
+		super(Shape.matrix(values.length, values.length > 0 ? values[0].length : -1));
 		assert values.length > 0 && values[0].length > 0;
-		shape = Shape.matrix(values.length, values[0].length);
 
 
 		for (double[] row : values) {
-			assert row.length == shape.rows;
+			assert row.length == shape.columns;
 
 			var to_insert = new ArrayList<Double>();
 			for (double number : row) {
@@ -24,7 +24,7 @@ public class FullMatrix extends GeneralMatrix {
 	}
 
 	public FullMatrix(ArrayList<ArrayList<Double>> matrix) {
-		shape = Shape.matrix(matrix.size(), matrix.get(0).size());
+		super(Shape.matrix(matrix.size(), matrix.get(0).size()));
 		this.values = matrix;
 	}
 

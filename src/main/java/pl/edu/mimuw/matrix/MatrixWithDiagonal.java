@@ -3,11 +3,13 @@ package pl.edu.mimuw.matrix;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 public abstract class MatrixWithDiagonal extends GeneralMatrix {
 	protected ArrayList<Double> diagonal;
 
 	public MatrixWithDiagonal(double... diagonal_values) {
+		super(Shape.matrix(diagonal_values.length, diagonal_values.length));
 		assert diagonal_values.length != 0;
 
 		diagonal = new ArrayList<>();
@@ -31,6 +33,6 @@ public abstract class MatrixWithDiagonal extends GeneralMatrix {
 
 	@Override
 	public double frobeniusNorm() {
-		return diagonal.stream().reduce(0., (acc, b) -> acc + b*b);
+		return sqrt(diagonal.stream().reduce(0., (acc, b) -> acc + b*b));
 	}
 }

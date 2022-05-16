@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class IdentityMatrix extends GeneralMatrix {
 	public IdentityMatrix(int size) {
+		super(Shape.matrix(size, size));
 		shape.columns = size;
 		shape.rows = size;
 	}

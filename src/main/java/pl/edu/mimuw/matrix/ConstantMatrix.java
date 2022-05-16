@@ -7,6 +7,7 @@ public class ConstantMatrix extends GeneralMatrix {
 	private final double value;
 
 	public ConstantMatrix(Shape shape, double value) {
+		super(shape);
 		this.shape = shape;
 		this.value = value;
 	}
