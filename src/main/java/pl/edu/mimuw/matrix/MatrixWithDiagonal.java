@@ -10,7 +10,8 @@ public abstract class MatrixWithDiagonal extends GeneralMatrix {
 
 	public MatrixWithDiagonal(double... diagonal_values) {
 		super(Shape.matrix(diagonal_values.length, diagonal_values.length));
-		assert diagonal_values.length != 0;
+
+		assert diagonal_values != null && diagonal_values.length != 0;
 
 		diagonal = new ArrayList<>();
 		shape.rows = diagonal_values.length;

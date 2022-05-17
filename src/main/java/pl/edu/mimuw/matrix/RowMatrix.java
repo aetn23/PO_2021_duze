@@ -18,6 +18,7 @@ public class RowMatrix extends ColumnRowMatrix {
 
 	@Override
 	public double get(int row, int column) {
+		checkIfIndexInbounds(row, column);
 		return values.get(row);
 	}
 

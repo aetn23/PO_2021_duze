@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class IdentityMatrix extends GeneralMatrix {
 	public IdentityMatrix(int size) {
 		super(Shape.matrix(size, size));
+
+		assert size > 0;
+
 		shape.columns = size;
 		shape.rows = size;
 	}
@@ -53,6 +56,7 @@ public class IdentityMatrix extends GeneralMatrix {
 
 	@Override
 	public double get(int row, int column) {
+		checkIfIndexInbounds(row, column);
 		return row == column ? 1. : 0.;
 	}
 }

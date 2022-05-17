@@ -8,7 +8,7 @@ public class ConstantMatrix extends GeneralMatrix {
 
 	public ConstantMatrix(Shape shape, double value) {
 		super(shape);
-		this.shape = shape;
+
 		this.value = value;
 	}
 
@@ -24,6 +24,7 @@ public class ConstantMatrix extends GeneralMatrix {
 
 	@Override
 	public double get(int row, int column) {
+		checkIfIndexInbounds(row, column);
 		return value;
 	}
 

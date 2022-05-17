@@ -12,14 +12,16 @@ public abstract class GeneralMatrix implements IDoubleMatrix {
 	protected Shape shape;
 
 	public GeneralMatrix(Shape shape) {
+		assert shape != null;
 		this.shape = shape;
 	}
+
 	public IDoubleMatrix times(IDoubleMatrix other) {
 		assert this.shape().columns == other.shape().rows;
 
 		var result_as_array = new ArrayList<ArrayList<Double>>();
 		for (int i = 0; i < this.shape().rows; i++) {
-			result_as_array.add(new ArrayList<Double>());
+			result_as_array.add(new ArrayList<>());
 			for (int j = 0; j < other.shape().columns; j++) {
 				double sum = 0.;
 				for (int k = 0; k < this.shape().columns; k++)
@@ -57,14 +59,14 @@ public abstract class GeneralMatrix implements IDoubleMatrix {
 
 	@Override
 	public IDoubleMatrix plus(IDoubleMatrix other) {
-		assert other.shape().hashCode() == this.shape().hashCode();
+		assert other.shape().rows == this.shape.rows && other.shape().columns == this.shape().columns;
+
 		ArrayList<ArrayList<Double>> result = new ArrayList<>();
-		var other_data = other.data();
 
 		for (int i = 0; i < this.shape().rows; i++) {
 			result.add(new ArrayList<Double>());
-			for (int j = 0; i < this.shape().columns; j++)
-				result.get(i).add(other_data[i][j] + get(i, j));
+			for (int j = 0; j < this.shape().columns; j++)
+				result.get(i).add(other.get(i, j) + get(i, j));
 		}
 
 		return new FullMatrix(result);
@@ -137,14 +139,17 @@ public abstract class GeneralMatrix implements IDoubleMatrix {
 
 	@Override
 	public double[][] data() {
-		var result = new double[shape.rows][shape.rows];
+		var result = new double[shape.rows][shape.columns];
 		for (int i = 0; i < shape.rows; i++) {
-			for (int j = 0; i < shape.columns; j++) {
+			for (int j = 0; j < shape.columns; j++) {
 				result[i][j] = get(i, j);
 			}
 		}
 		return result;
 	}
 
+	protected void checkIfIndexInbounds(int row, int column) {
+		assert row >= 0 && row < shape.rows && column >= 0 && column < shape.columns;
+	}
 
 }

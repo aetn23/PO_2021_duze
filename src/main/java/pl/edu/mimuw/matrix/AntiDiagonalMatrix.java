@@ -5,11 +5,12 @@ import java.util.stream.Collectors;
 
 public class AntiDiagonalMatrix extends MatrixWithDiagonal {
 
-	public AntiDiagonalMatrix(double... diagonal_valeues) {
-		super(diagonal_valeues);
+	public AntiDiagonalMatrix(double... diagonal_values) {
+		super(diagonal_values);
 	}
 
 	public AntiDiagonalMatrix(ArrayList<Double> diagonal) {
+		assert diagonal != null;
 		this.diagonal = diagonal;
 	}
 
@@ -27,6 +28,7 @@ public class AntiDiagonalMatrix extends MatrixWithDiagonal {
 
 	@Override
 	public double get(int row, int column) {
+		checkIfIndexInbounds(row, column);
 		return row + column == shape.rows + 1 ? diagonal.get(column) : 0.;
 	}
 }

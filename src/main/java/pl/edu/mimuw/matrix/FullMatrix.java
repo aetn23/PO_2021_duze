@@ -8,10 +8,9 @@ public class FullMatrix extends GeneralMatrix {
 
 	public FullMatrix(double[][] values) {
 		super(Shape.matrix(values.length, values.length > 0 ? values[0].length : -1));
-		assert values.length > 0 && values[0].length > 0;
-
 
 		for (double[] row : values) {
+			assert row != null;
 			assert row.length == shape.columns;
 
 			var to_insert = new ArrayList<Double>();
@@ -30,6 +29,7 @@ public class FullMatrix extends GeneralMatrix {
 
 	@Override
 	public double get(int row, int column) {
+		checkIfIndexInbounds(row, column);
 		return values.get(row).get(column);
 	}
 }

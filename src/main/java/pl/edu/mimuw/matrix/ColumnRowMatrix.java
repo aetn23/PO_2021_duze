@@ -10,14 +10,18 @@ public abstract class ColumnRowMatrix extends GeneralMatrix {
 
 	public ColumnRowMatrix(ArrayList<Double> values, Shape shape) {
 		super(shape);
+
+		assert values != null;
+
 		this.values = values;
-		this.shape = shape;
 	}
 
 	public ColumnRowMatrix(double[] values, Shape shape) {
 		super(shape);
+
+		assert values != null;
+
 		this.values = new ArrayList<Double>();
 		for (double value : values) this.values.add(value);
-		this.shape = shape;
 	}
 }

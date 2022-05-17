@@ -12,6 +12,8 @@ public class DiagonalMatrix extends MatrixWithDiagonal {
 	}
 
 	public DiagonalMatrix(ArrayList<Double> diagonal) {
+		assert diagonal != null;
+
 		this.diagonal = diagonal;
 	}
 
@@ -29,6 +31,7 @@ public class DiagonalMatrix extends MatrixWithDiagonal {
 
 	@Override
 	public double get(int row, int column) {
+		checkIfIndexInbounds(row, column);
 		return row == column ? diagonal.get(row) : 0.;
 	}
 }
