@@ -10,7 +10,6 @@ public class DoubleMatrixFactory {
   }
 
   public static IDoubleMatrix full(double[][] values) {
-    //todo move this somewhere else
     assert values != null;
     return new FullMatrix(values); // Tu trzeba wpisać właściwą instrukcję
   }

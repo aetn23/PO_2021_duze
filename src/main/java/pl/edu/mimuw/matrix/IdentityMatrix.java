@@ -5,11 +5,6 @@ import java.util.ArrayList;
 public class IdentityMatrix extends GeneralMatrix {
 	public IdentityMatrix(int size) {
 		super(Shape.matrix(size, size));
-
-		assert size > 0;
-
-		shape.columns = size;
-		shape.rows = size;
 	}
 
 	@Override
@@ -21,22 +16,22 @@ public class IdentityMatrix extends GeneralMatrix {
 	public IDoubleMatrix times(double scalar) {
 		var result_as_array = new ArrayList<Double>();
 
-		for(int i =0; i < shape.rows; i++) {
+		for (int i = 0; i < shape.rows; i++) {
 			result_as_array.add(scalar);
 		}
 
-		return new DiagonalMatrix(result_as_array);
+		return new DiagonalMatrix(result_as_array, shape);
 	}
 
 	@Override
 	public IDoubleMatrix plus(double scalar) {
 		var result_as_array = new ArrayList<Double>();
 
-		for(int i =0; i < shape.rows; i++) {
+		for (int i = 0; i < shape.rows; i++) {
 			result_as_array.add(scalar + 1.);
 		}
 
-		return new DiagonalMatrix(result_as_array);
+		return new DiagonalMatrix(result_as_array, shape);
 	}
 
 	@Override

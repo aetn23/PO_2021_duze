@@ -1,9 +1,6 @@
 package pl.edu.mimuw.matrix;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.SocketHandler;
-import java.util.stream.Collectors;
 
 public abstract class ColumnRowMatrix extends GeneralMatrix {
 	protected ArrayList<Double> values;

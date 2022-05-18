@@ -1,63 +1,47 @@
 package pl.edu.mimuw;
 
-import pl.edu.mimuw.matrix.DoubleMatrixFactory;
-import pl.edu.mimuw.matrix.FullMatrix;
-import pl.edu.mimuw.matrix.GeneralMatrix;
-import pl.edu.mimuw.matrix.IDoubleMatrix;
+import pl.edu.mimuw.matrix.*;
 
-import static pl.edu.mimuw.matrix.DoubleMatrixFactory.sparse;
-import static pl.edu.mimuw.matrix.MatrixCellValue.cell;
-import static pl.edu.mimuw.matrix.Shape.matrix;
+import static pl.edu.mimuw.matrix.DoubleMatrixFactory.diagonal;
 
 public class Main {
 
+	// IDE Intelij Idea najnowsze Java 18.
+
 	public static void main(String[] args) {
 		// Tu trzeba wpisać kod testujący toString dla poszczególnych macierzy i wyników operacji
-		double[][] test = {{1., 3, 3.}, {1., 5., 0.}, {0., 0., 0.}};
-		double[][] identity = {{1., 0, 0}, {0, 1., 0.}, {0., 0., 1.}};
-		var iden_matrix = new FullMatrix(identity);
-		var matrix = new FullMatrix(test);
-		var new_matrx = matrix.times(1);
-		System.out.println(new_matrx.toString());
-		System.out.println(new_matrx.normOne());
-		System.out.println(new_matrx.normInfinity());
-		System.out.println(new_matrx.frobeniusNorm());
-		System.out.println(new_matrx.times(iden_matrix).toString());
 
-		System.out.println(SPARSE_2X3.toString());
+		double[] values = {1., 2., 3., 4., 5., 6., 7., 8., 9., 10.};
+		double[][] values2 =
+						{{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.}, {1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.},
+										{1., 2., 3., 4., 5., 6., 7., 8., 9., 10.}};
 
-		final var l = DoubleMatrixFactory.sparse(
-						matrix(1_000_000, 1_000_000_000),
-						cell(0, 0, 42),
-						cell(767, 123_123, 24),
-						cell(999_999, 999_999_999, 66)
-		);
-		final var r = DoubleMatrixFactory.sparse(
-						matrix(1_000_000, 1_000_000_000),
-						cell(0, 0, 24),
-						cell(767, 123_123, 42)
-		);
-		final var result = l.plus(r);
+		MatrixCellValue a1 = new MatrixCellValue(0, 0, 2);
+		MatrixCellValue a2 = new MatrixCellValue(9, 9, 234);
+
+		var anitdiagonal = new AntiDiagonalMatrix(values);
+		var constant = new ConstantMatrix(Shape.matrix(10, 10), 21);
+		var diag = new DiagonalMatrix(values);
+		var full = new FullMatrix(values2);
+		var identiy = new IdentityMatrix(10);
+		var sparse_matrix = new SparseMatrix(Shape.matrix(1000, 100), a1, a2);
+
+		System.out.println(anitdiagonal.toString());
+		System.out.println(constant.toString());
+		System.out.println(diag.toString());
+		System.out.println(full.toString());
+		System.out.println(identiy.toString());
+		System.out.println(sparse_matrix.toString());
+
 
 	}
 
-
-	public static final IDoubleMatrix SPARSE_2X3 = sparse(matrix(2, 3),
-					cell(0, 0, 1),
-					cell(0, 1, 2),
-					cell(0, 2, 3),
-					cell(1, 0, 4),
-					cell(1, 1, 5),
-					cell(1, 2, 6)
-	);
-
-	public static final IDoubleMatrix SPARSE_3X2 = sparse(matrix(3, 2),
-					cell(0, 0, 1),
-					cell(0, 1, 2),
-					cell(1, 0, 3),
-					cell(1, 1, 4),
-					cell(2, 0, 5),
-					cell(2, 1, 6)
-	);
 
 }

@@ -1,6 +1,5 @@
 package pl.edu.mimuw.matrix;
 
-import javax.swing.plaf.basic.BasicTreeUI;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 

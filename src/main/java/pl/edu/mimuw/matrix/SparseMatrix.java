@@ -2,9 +2,10 @@ package pl.edu.mimuw.matrix;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 public class SparseMatrix extends GeneralMatrix {
 	ArrayList<ArrayList<MatrixCellValue>> values_rows;
@@ -46,6 +47,10 @@ public class SparseMatrix extends GeneralMatrix {
 		values_rows.add(new ArrayList<>());
 
 		for (int i = 0; i < values_sorted_by_rows.length; i++) {
+			assert values_sorted_by_columns[i].column >= 0 && values_sorted_by_columns[i].row >= 0 &&
+							values_sorted_by_columns[i].column < shape.columns &&
+							values_sorted_by_columns[i].row < shape.rows;
+
 			if (i != 0 && values_sorted_by_columns[i - 1].column != values_sorted_by_columns[i].column) {
 				values_columns.add(new ArrayList<>());
 			}
@@ -62,23 +67,23 @@ public class SparseMatrix extends GeneralMatrix {
 
 	}
 
-	// row1 size is bigger than row2 size
-	private void sum_two_rows(ArrayList<MatrixCellValue> row1, ArrayList<MatrixCellValue> row2,
+	// array1 size is bigger than array2 size
+	private void sum_two_rows(ArrayList<MatrixCellValue> array1, ArrayList<MatrixCellValue> array2,
 														ArrayList<MatrixCellValue> result) {
-		if (row1.size() < row2.size())
-			sum_two_rows(row2, row1, result);
+		if (array1.size() < array2.size())
+			sum_two_rows(array2, array1, result);
 
-		for (int i = 0; i < row1.size(); i++) {
-			if (row2.size() > i) {
-				if (row2.get(i).column == row1.get(i).column) {
-					result.add(MatrixCellValue.cell(row1.get(i).row, row1.get(i).column,
-									row1.get(i).value + row2.get(i).value));
+		for (int i = 0; i < array1.size(); i++) {
+			if (array2.size() > i) {
+				if (array2.get(i).column == array1.get(i).column) {
+					result.add(MatrixCellValue.cell(array1.get(i).row, array1.get(i).column,
+									array1.get(i).value + array2.get(i).value));
 				} else {
-					result.add(row1.get(i));
-					result.add(row2.get(i));
+					result.add(array1.get(i));
+					result.add(array2.get(i));
 				}
 			} else {
-				result.add(row1.get(i));
+				result.add(array1.get(i));
 			}
 		}
 	}
@@ -87,8 +92,9 @@ public class SparseMatrix extends GeneralMatrix {
 	public IDoubleMatrix plus(IDoubleMatrix other) {
 		if (other.getClass() == this.getClass()) {
 			var other_sparse = (SparseMatrix) other;
-			System.out.println("ADDing");
+
 			assert other_sparse.shape.columns == shape.columns && other_sparse.shape.rows == shape.rows;
+
 			if (other_sparse.values_rows.size() > values_rows.size())
 				return other_sparse.plus(this);
 
@@ -110,7 +116,7 @@ public class SparseMatrix extends GeneralMatrix {
 
 			return new SparseMatrix(shape, matrix_cells.toArray(new MatrixCellValue[0]));
 		} else {
-			return super.times(other);
+			return super.plus(other);
 		}
 	}
 
@@ -137,6 +143,43 @@ public class SparseMatrix extends GeneralMatrix {
 						.toArray(MatrixCellValue[]::new));
 	}
 
+	private double multiply_row_column(ArrayList<MatrixCellValue> array1,
+																		 ArrayList<MatrixCellValue> array2) {
+		double sum = 0.;
+
+		for (int i = 0; i < array1.size(); i++) {
+			if (array2.size() > i) {
+				if (array2.get(i).row == array1.get(i).column) {
+					sum += array1.get(i).value * array2.get(i).value;
+				}
+			}
+		}
+		return sum;
+	}
+
+	@Override
+	public IDoubleMatrix times(IDoubleMatrix other) {
+		assert shape.columns == other.shape().rows;
+
+		if (other.getClass() == this.getClass()) {
+			var other_sparse = (SparseMatrix) other;
+			ArrayList<MatrixCellValue> matrix_cells = new ArrayList<>();
+
+			for (int i = 0; i < values_rows.size(); i++) {
+				for (int j = 0; j < other_sparse.values_columns.size(); j++) {
+					matrix_cells.add(MatrixCellValue.cell(values_rows.get(i).get(0).row,
+									other_sparse.values_columns.get(j).get(0).column,
+									multiply_row_column(values_rows.get(i), other_sparse.values_columns.get(j))));
+				}
+			}
+
+			return new SparseMatrix(Shape.matrix(shape.rows, other_sparse.shape.columns), matrix_cells.toArray(new MatrixCellValue[0]));
+		} else {
+			return super.times(other);
+		}
+
+	}
+
 	@Override
 	public double get(int row, int column) {
 		checkIfIndexInbounds(row, column);
@@ -145,10 +188,28 @@ public class SparseMatrix extends GeneralMatrix {
 			for (var cell : row_of_cell) {
 				if (cell.row == row && cell.column == column)
 					return cell.value;
-				if (cell.row > row || cell.column > column)
-					return 0.;
 			}
 		}
 		return 0.;
 	}
+
+	public double normOne() {
+		return values_columns.stream().map(column -> column.stream().map(cell -> cell.value)
+										.reduce(0., (acc, value) -> acc + abs(value)))
+						.reduce(0., (acc, value) -> acc > value ? acc : value);
+	}
+
+	@Override
+	public double normInfinity() {
+		return values_rows.stream().map(column -> column.stream().map(cell -> cell.value)
+										.reduce(0., (acc, value) -> acc + abs(value)))
+						.reduce(0., (acc, value) -> acc > value ? acc : value);
+	}
+
+	@Override
+	public double frobeniusNorm() {
+		return sqrt(values_columns.stream().map(column -> column.stream().map(cell -> cell.value)
+						.reduce(0., (acc, value) -> acc + value * value)).reduce(Double::sum).get());
+	}
+
 }

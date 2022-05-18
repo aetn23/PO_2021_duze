@@ -2,7 +2,6 @@ package pl.edu.mimuw.matrix;
 
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
@@ -82,6 +81,7 @@ public abstract class GeneralMatrix implements IDoubleMatrix {
 		return this.plus(-scalar);
 	}
 
+	@Override
 	public double normOne() {
 		var result = new ArrayList<Double>();
 		for (int i = 0; i < shape().columns; i++) {

@@ -1,7 +1,7 @@
 package pl.edu.mimuw.matrix;
 
 import java.util.Objects;
-//This should be named not shape, but Dimensions. Stupid
+
 public final class Shape {
   public int rows;
   public int columns;
